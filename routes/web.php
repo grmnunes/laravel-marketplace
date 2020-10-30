@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,4 +28,6 @@ Route::prefix('admin')->namespace('Admin')->group(function() {
         Route::get('/destroy/{store}', 'StoreController@destroy')->name('store.destroy');
 
     });
+
+    Route::resource('products', 'ProductController');
 });

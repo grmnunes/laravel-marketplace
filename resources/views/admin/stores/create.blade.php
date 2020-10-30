@@ -3,9 +3,10 @@
 @section('content')
 
     <form action="{{route('store.save')}}" method="post">
-        <input type="hidden" name="_token" value="{{csrf_token()}}">
 
-    <div class="form-group" >
+        @csrf
+
+        <div class="form-group" >
             <label for="user">Selecione um usuário:</label>
             <select name="user" id="users" class="form-control">
             <option value="#">Selecione...</option>

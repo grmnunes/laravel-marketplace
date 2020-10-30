@@ -3,18 +3,33 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\Store;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
-{
+class ProductController extends Controller {
+
+    private $product;
+    private $store;
+    private $category;
+
+    public function __construct(Product $product, Store $store, Category $category) {
+
+        $this->product = $product;
+        $this->store = $store;
+        $this->category = $category;
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
+    public function index() {
+
+        $products = $this->product->paginate(10);
+
+        return view('admin.products.index', compact('products'));
     }
 
     /**
@@ -22,9 +37,12 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
+    public function create() {
+
+        $stores = $this->store->all(['id', 'name']);
+        $categories = $this->category->all(['id', 'name']);
+
+        return view('admin.products.create', compact(['stores', 'categories']));
     }
 
     /**
@@ -33,9 +51,15 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request) {
+
+        $data = $request->all();
+        $store = $this->store->find($data['store']);
+        $store->products()->create($data);
+
+        flash('Produto cadastrado com sucesso!')->success();
+
+        return redirect()->route('products.index');
     }
 
     /**
@@ -55,9 +79,11 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
+    public function edit($productId) {
+
+        $product = $this->product->findOrFail($productId);
+
+        return view('admin.products.edit', compact('product'));
     }
 
     /**
@@ -67,9 +93,16 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
+    public function update(Request $request, $productId) {
+
+        $data = $request->all();
+        $product = $this->product->find($productId);
+
+        $product->update($data);
+
+        flash('Produto atualizado com sucesso!');
+
+        return redirect()->route('products.index');
     }
 
     /**
@@ -78,8 +111,14 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy($productId) {
+
+        $product = $this->product->find($productId);
+
+        $product->delete();
+
+        flash('Produto removido com sucesso!');
+
+        return redirect()->route('products.index');
     }
 }
