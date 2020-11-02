@@ -2,12 +2,12 @@
 
 @section('content')
 
-    <form action="{{route('store.save')}}" method="post">
+    <form action="{{route('categories.store')}}" method="post">
 
         @csrf
 
         <div class="form-group">
-            <label for="name">Nome da Loja: </label>
+            <label for="name">Nome: </label>
             <input type="text"
                    name="name"
                    id="name"
@@ -37,40 +37,10 @@
             @enderror
         </div>
         <div class="form-group">
-            <label for="name">Telefone: </label>
-            <input type="text"
-                   name="phone"
-                   id="phone"
-                   class="form-control @error('phone') is-invalid @enderror"
-                   value="{{old('phone')}}"
-            >
-
-            @error('phone')
-                <div class="invalid-feedback">
-                    {{$message}}
-                </div>
-            @enderror
-        </div>
-        <div class="form-group">
-            <label for="name">Celular/Whatsapp: </label>
-            <input type="text"
-                   name="mobile_phone"
-                   id="mobile_phone"
-                   class="form-control @error('mobile_phone') is-invalid @enderror"
-                   value="{{old('mobile_phone')}}"
-            >
-
-            @error('mobile_phone')
-                <div class="invalid-feedback">
-                    {{$message}}
-                </div>
-            @enderror
-        </div>
-        <div class="form-group">
             <label for="name">Slug: </label>
             <input type="text" name="slug" id="slug" class="form-control">
         </div>
-        <button type="submit" class="btn btn-primary">Cadastrar loja</button>
+        <button type="submit" class="btn btn-primary">Cadastrar categoria</button>
     </form>
 @endsection
 

@@ -6,31 +6,43 @@ use App\Http\Controllers\Controller;
 use App\Models\Store;
 use App\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreRequest;
 
 class StoreController extends Controller {
 
+    public function __construct() {
+
+        $this->middleware('user.has.store')->only(['create', 'store']);
+
+    }
+
     public function index() {
 
-        $stores = Store::paginate(10);
-
-        return view('admin.stores.index', compact('stores'));
+        $store = auth()->user()->store;
+        return view('admin.stores.index', compact('store'));
     }
 
     public function create() {
+
+        if(auth()->user()->store) {
+
+            return redirect('admin/stores');
+        }
 
         $users = User::all(['id', 'name']);
 
         return view('admin.stores.create', compact('users'));
     }
 
-    public function store(Request $request) {
+    public function store(StoreRequest $request) {
 
         $data = $request->all();
-        $user = User::find($data['user']);
-
+        $user = auth()->user();
         $store = $user->store()->create($data);
 
-        return $store;
+        flash('Loja criada com sucesso!');
+
+        return redirect()->route('store.index');
 
     }
 
@@ -44,7 +56,7 @@ class StoreController extends Controller {
         return view('admin.stores.edit', compact(['store', 'users', 'currentUser']));
     }
 
-    public function update(Request $request, $storeId) {
+    public function update(StoreRequest $request, $storeId) {
 
         $data = $request->all();
         $store = Store::find($storeId);

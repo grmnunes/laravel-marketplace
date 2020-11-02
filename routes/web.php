@@ -14,20 +14,28 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
 
 
-Route::prefix('admin')->namespace('Admin')->group(function() {
-    Route::prefix('stores')->group(function() {
+Route::group(['middleware'=> ['auth']], function() {
 
-        Route::get('/', 'StoreController@index')->name('store.index');
-        Route::get('/create', 'StoreController@create')->name('store.create');
-        Route::post('/store', 'StoreController@store')->name('store.save');
-        Route::get('/{store}/edit', 'StoreController@edit')->name('store.edit');
-        Route::post('/update/{store}', 'StoreController@update')->name('store.update');
-        Route::get('/destroy/{store}', 'StoreController@destroy')->name('store.destroy');
+    Route::prefix('admin')->namespace('Admin')->group(function() {
+        Route::prefix('stores')->group(function() {
 
+            Route::get('/', 'StoreController@index')->name('store.index');
+            Route::get('/create', 'StoreController@create')->name('store.create');
+            Route::post('/store', 'StoreController@store')->name('store.save');
+            Route::get('/{store}/edit', 'StoreController@edit')->name('store.edit');
+            Route::post('/update/{store}', 'StoreController@update')->name('store.update');
+            Route::get('/destroy/{store}', 'StoreController@destroy')->name('store.destroy');
+
+        });
+
+        Route::resource('products', 'ProductController');
+        Route::resource('categories', 'CategoryController');
     });
-
-    Route::resource('products', 'ProductController');
 });
+
+Auth::routes();
+
+//Route::get('/home', 'HomeController@index')->name('home');

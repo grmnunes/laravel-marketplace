@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-    <a href="{{route('store.create')}}" class="btn btn-lg btn-success m-3">Nova Loja</a>
+    @if(!$store)
+        <a href="{{route('store.create')}}" class="btn btn-lg btn-success m-3">Nova Loja</a>
+    @endif
     <table class="table table-striped">
         <thead>
             <tr>
@@ -11,7 +13,6 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($stores as $store)
                 <tr>
                     <td>{{$store->id}}</td>
                     <td>{{$store->name}}</td>
@@ -20,9 +21,6 @@
                         <a href="{{route('store.destroy', $store->id)}}" class="btn btn-sm btn-danger">REMOVER</a>
                     </td>
                 </tr>
-            @endforeach
         </tbody>
     </table>
-
-    {{$stores->links()}}
 @endsection

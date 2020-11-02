@@ -5,20 +5,6 @@
     <form action="{{route('store.update', $store->id)}}" method="post">
         <input type="hidden" name="_token" value="{{csrf_token()}}">
 
-    <div class="form-group" >
-            <label for="user">Selecione um usuário:</label>
-            <select name="user" id="users" class="form-control">
-            <option value="#">Selecione...</option>
-            @foreach($users as $user)
-                @if($currentUser->id === $user->id)
-                    <option value={{$user->id}} selected >{{$user->name}}</option>
-                @else
-                    <option value={{$user->id}} >{{$user->name}}</option>
-                @endif
-            @endforeach
-            </select>
-        </div>
-
         <div class="form-group">
             <label for="name">Nome da Loja: </label>
             <input type="text" name="name" id="name" class="form-control" value="{{$store->name}}">

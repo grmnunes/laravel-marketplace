@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Store;
 use Illuminate\Http\Request;
+use App\Http\Requests\ProductRequest;
 
 class ProductController extends Controller {
 
@@ -39,10 +40,9 @@ class ProductController extends Controller {
      */
     public function create() {
 
-        $stores = $this->store->all(['id', 'name']);
         $categories = $this->category->all(['id', 'name']);
 
-        return view('admin.products.create', compact(['stores', 'categories']));
+        return view('admin.products.create', compact(['categories']));
     }
 
     /**
@@ -51,11 +51,13 @@ class ProductController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(ProductRequest $request) {
 
         $data = $request->all();
-        $store = $this->store->find($data['store']);
-        $store->products()->create($data);
+        $store = auth()->user()->store;
+        $product = $store->products()->create($data);
+
+        $product->categories()->sync($data['categories']);
 
         flash('Produto cadastrado com sucesso!')->success();
 
