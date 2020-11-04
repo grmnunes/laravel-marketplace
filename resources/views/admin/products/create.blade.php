@@ -2,7 +2,7 @@
 
 @section('content')
 
-<form action="{{route('products.store')}}" method="post">
+<form action="{{route('products.store')}}" method="post" enctype="multipart/form-data">
 
     @csrf
 
@@ -63,6 +63,10 @@
             {{$message}}
         </div>
         @enderror
+    </div>
+    <div class="form-group">
+        <label for="photos">Fotos do produto:</label>
+        <input type="file" name="photos[]" id="photos" class="form-control" multiple>
     </div>
     <div class="form-group">
         <label for="name">Slug: </label>

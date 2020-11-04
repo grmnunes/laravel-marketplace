@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ProductPhotoController;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,7 @@ Route::group(['middleware'=> ['auth']], function() {
 
         Route::resource('products', 'ProductController');
         Route::resource('categories', 'CategoryController');
+        Route::post('/photos/remove/{photoName}', 'ProductPhotoController@removePhoto')->name('photo.remove');
     });
 });
 
